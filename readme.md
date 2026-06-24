@@ -19,7 +19,6 @@ An advanced, full-stack **Vector Database, Semantic Search, and RAG Engine** bui
 * **Real-time 2D PCA Projection:** High-dimensional vectors (up to 768D from Ollama) are dynamically projected using Principal Component Analysis down to a stunning 2D interactive canvas.
 * **Production-Grade Local RAG:** Fully functional Document Chunking, Embedding Creation (`nomic-embed-text`), and Question Answering pipeline powered safely on-device by `llama3.2:1b`.
 
----
 
 ## 🏗️ System Architecture
 
@@ -31,12 +30,4 @@ graph TD
     B -->|4. Index / Search| D{Vector Storage}
     D -->|HNSW Graph| E[Results & Latency Metrics]
     D -->|KD-Tree / BruteForce| E
-    E -->|5. 2D PCA Projection Data| 
-    📁 Project Structure
-The engine is engineered as a highly lightweight, clean two-file implementation keeping memory foot-print and deployment modularity optimal:
-
-Plaintext
-VECTPR DB/
-│
-├── vector_db_server.py  # Thread-safe Vector Storage Engine, Custom DSA Indexes, & Flask Core REST APIs
-└── index.html           # Modern Neon Dashboard, 2D PCA Projection Canvas Engine, & AI I
+    E -->|5. 2D PCA Projection Data| A
