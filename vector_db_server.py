@@ -838,7 +838,7 @@ def chunk_text(text, chunk_words=220, overlap_words=40):
 def build_prompt(question, hits):
     if not hits:
         return (
-            "Answer the following question clearly and honestly. "
+            ""Answer the following question clearly and honestly. Public figures such as actors, athletes and politicians may be discussed using general knowledge. ""
             "If you are uncertain, say so.\n\n"
             f"Question: {question}\n\nAnswer:"
         )
