@@ -838,6 +838,15 @@ def chunk_text(text, chunk_words=250, overlap_words=30):
 def build_prompt(question, hits):
     """Same behaviour as the C++ server: use the excerpts when they help,
     otherwise answer from general knowledge, and never mention 'context'."""
+    if not hits:
+        # No matching document: send the question almost as-is (like typing it
+        # into `ollama run`). Wrapping it in "use the context..." rules with an
+        # empty context confuses small models and can trigger refusals.
+        return (
+            "Answer the following question directly and completely, "
+            "using your general knowledge.\n\n"
+            f"{question}"
+        )
     context_text = ""
     for i, (_, doc) in enumerate(hits, start=1):
         context_text += f"[{i}] {doc.title}:\n{doc.text}\n\n"
@@ -1056,7 +1065,10 @@ def create_app():
         if not question:
             return jsonify({"error": "Question is required."}), 400
         hits = retrieve(question, parse_k(data), parse_max_dist(data))
-        answer = ollama.generate(build_prompt(question, hits))
+        prompt = build_prompt(question, hits)
+        if os.environ.get("DEBUG_PROMPT"):
+            log.info("PROMPT SENT TO OLLAMA:\n%s", prompt)
+        answer = ollama.generate(prompt)
         return jsonify({
             "answer": answer,
             "model": ollama.gen_model,
