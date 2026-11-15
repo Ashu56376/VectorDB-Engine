@@ -1,19 +1,4 @@
-"""
-VectorDB Engine - backend (Flask)
 
-Run:
-    pip install flask requests pypdf
-    python vectordb_engine.py
-Then open  http://localhost:8080  (index.html must be in the same folder).
-
-Environment variables (all optional):
-    HOST=127.0.0.1  PORT=8080
-    OLLAMA_BASE_URL=http://127.0.0.1:11434
-    OLLAMA_EMBED_MODEL=nomic-embed-text
-    OLLAMA_GEN_MODEL=llama3.2:3b
-    OLLAMA_NUM_CTX=4096
-    MAX_CHUNKS=300
-"""
 from __future__ import annotations
 
 import heapq
