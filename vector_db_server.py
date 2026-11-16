@@ -596,6 +596,10 @@ class OllamaClient:
         self.embed_model = os.environ.get("OLLAMA_EMBED_MODEL", "nomic-embed-text")
         self.gen_model = os.environ.get("OLLAMA_GEN_MODEL", "llama3.2:3b")
         self.num_ctx = int(os.environ.get("OLLAMA_NUM_CTX", "4096"))
+        # speed: cap the answer length (shorter answers finish much sooner on CPU)
+        # and keep the model loaded so the next question does not reload it.
+        self.num_predict = int(os.environ.get("OLLAMA_NUM_PREDICT", "250"))
+        self.keep_alive = os.environ.get("OLLAMA_KEEP_ALIVE", "30m")
 
     def installed_models(self):
         try:
@@ -672,7 +676,12 @@ class OllamaClient:
                     "stream": False,
                     # default Ollama context is small; without this long
                     # prompts get silently truncated from the START.
-                    "options": {"num_ctx": self.num_ctx, "temperature": 0.2},
+                    "keep_alive": self.keep_alive,
+                    "options": {
+                        "num_ctx": self.num_ctx,
+                        "temperature": 0.2,
+                        "num_predict": self.num_predict,
+                    },
                 },
                 timeout=300,
             )
